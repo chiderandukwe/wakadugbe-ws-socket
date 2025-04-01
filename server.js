@@ -1183,7 +1183,8 @@ app.get("/", (req, res) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 3322;
+// const PORT = process.env.PORT || 3322;
+const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
     logToFile(`Server running on http://localhost:${PORT}`);
     console.log(`Server running on http://localhost:${PORT}`);
