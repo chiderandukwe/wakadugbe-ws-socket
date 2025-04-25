@@ -28,7 +28,8 @@ const io = new Server(server, {
 });
 
 // Constants
-const LARAVEL_BASE_URL = 'https://wakajugbe.sky51event.uk';
+// const LARAVEL_BASE_URL = 'https://wakajugbe.sky51event.uk';
+const LARAVEL_BASE_URL = 'https://wk-new.sky51event.uk';
 // const LARAVEL_BASE_URL = 'http://localhost:8000';
 const LOG_FILE_PATH = path.join(__dirname, 'server.log');
 
@@ -44,6 +45,9 @@ let roomAssignments = {};
 // Endpoint to broadcast events from Laravel
 app.post('/broadcast', (req, res) => {
     const { event, data, room } = req.body;
+    // const event = "hol";
+    //     const data = "ehi";
+    // const room = "em";
     console.log('Received event:', event, 'with data:', data);
 
     if (event && data) {
@@ -715,15 +719,23 @@ const eventHandlers = {
             message: 'Trip in progress.',
             data: data,
         });
+            logToFile(`Trip in progress emitted data: ${data}`);
 
         try {
-            // Forward data to Laravel backend
+            // // Forward data to Laravel backend
+            // const response = await axios.post(`${LARAVEL_BASE_URL}/api/v2/event`, {
+            //     event: 'trip_in_progress',
+            //     order_id,
+            //     driver_id,
+            //     latitude,
+            //     longitude,
+            // });
             const response = await axios.post(`${LARAVEL_BASE_URL}/api/v2/event`, {
                 event: 'trip_in_progress',
-                order_id,
-                driver_id,
-                latitude,
-                longitude,
+                order_id: data.data?.order_id || data.order_id  || null,  // Fix order_id
+                driver_id: driverId,  
+                latitude: data.data?.latitude || data.latitude,
+                longitude: data.data?.longitude || data.longitude,
             });
     
             // Emit success response back to the client
